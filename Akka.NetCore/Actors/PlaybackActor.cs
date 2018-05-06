@@ -20,7 +20,7 @@ namespace Akka.NetCore.Actors
         
         private void HandlerMessage(PlaybackMessage message)
         {
-            Console.WriteLine(message.Name);
+            Console.WriteLine($"HandlerMessage: {message.Name}");
         }
 
         protected override void PreStart()
@@ -36,6 +36,11 @@ namespace Akka.NetCore.Actors
         protected override void PostRestart(Exception reason)
         {
             ConsoleUtil.WriteColor("===PostRestart===", ConsoleColor.Blue);
+        }
+
+        protected override void PreRestart(Exception reason, object message)
+        {
+            ConsoleUtil.WriteColor("===PostRestart===", ConsoleColor.Yellow);
         }
     }
 }
