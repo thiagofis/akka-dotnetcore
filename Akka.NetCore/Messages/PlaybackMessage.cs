@@ -2,6 +2,12 @@
 {
     public class PlaybackMessage
     {
-        public string Name { get; set; }   
+        public PlaybackMessage(string name)
+        {
+            Name = name;
+        }
+        
+        
+        public string Name { get; }   
     }
 }

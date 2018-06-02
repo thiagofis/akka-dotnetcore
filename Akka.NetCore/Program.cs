@@ -10,20 +10,48 @@ namespace Akka.NetCore
         
         static void Main(string[] args)
         {
-            var movieStreamingActorSystem = ActorSystem.Create("MovieStreamingActorSystem");
+            // First example of Akka.Net Core using ReceiveActor and PoisonPill
+            PlaybackActorExample();
             
+            // Second example of Akka.Net Core use Switchabel Actor Behaviour
+            ConciliatorActorExample();
+        }
+
+        private static void ConciliatorActorExample()
+        {
+            var paymentTransactionActorSystem = ActorSystem.Create("PaymentTransactionActorSystem");
+            
+            Props paymentTransactionActorProps = Props.Create<PaymentTransactionActor>();
+            IActorRef paymentTransactionActorRef =
+                paymentTransactionActorSystem.ActorOf(paymentTransactionActorProps, nameof(PaymentTransactionActor));
+            
+            paymentTransactionActorRef.Tell(new AutorizationMessage());
+            paymentTransactionActorRef.Tell(new CaptureMessage());
+            paymentTransactionActorRef.Tell(new RefaundMessage());
+            paymentTransactionActorRef.Tell(new AutorizationMessage());
+            
+            Console.ReadKey();
+
+            paymentTransactionActorSystem.Terminate().Wait();
+            Console.WriteLine("Terminate PaymentTransactionActorSystem");
+        }
+
+        private static void PlaybackActorExample()
+        {
+            var movieStreamingActorSystem = ActorSystem.Create("MovieStreamingActorSystem");
+
             Props playbackActorProps = Props.Create<PlaybackActor>();
             IActorRef playbackActorRef = movieStreamingActorSystem.ActorOf(playbackActorProps, nameof(PlaybackActor));
-            playbackActorRef.Tell(new PlaybackMessage{Name = "New message1"});
-            playbackActorRef.Tell(new PlaybackMessage{Name = "New message2"});
-            playbackActorRef.Tell(new PlaybackMessage{Name = "New message3"});
+            playbackActorRef.Tell(new PlaybackMessage("New message1"));
+            playbackActorRef.Tell(new PlaybackMessage("New message2"));
+            playbackActorRef.Tell(new PlaybackMessage("New message3"));
             playbackActorRef.Tell(PoisonPill.Instance);
-            playbackActorRef.Tell(new PlaybackMessage{Name = "New message4"});
-            playbackActorRef.Tell(new PlaybackMessage{Name = "New message5"});
-            playbackActorRef.Tell(new PlaybackMessage{Name = "New message6"});
+            playbackActorRef.Tell(new PlaybackMessage("New message4"));
+            playbackActorRef.Tell(new PlaybackMessage("New message5"));
+            playbackActorRef.Tell(new PlaybackMessage("New message6"));
 
             Console.ReadKey();
-            
+
             movieStreamingActorSystem.Terminate().Wait();
             Console.WriteLine("Terminate MovieStreamingActorSystem");
         }
