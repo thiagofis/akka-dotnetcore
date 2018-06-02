@@ -14,7 +14,13 @@ namespace Akka.NetCore
             
             Props playbackActorProps = Props.Create<PlaybackActor>();
             IActorRef playbackActorRef = movieStreamingActorSystem.ActorOf(playbackActorProps, nameof(PlaybackActor));
-            playbackActorRef.Tell(new PlaybackMessage{Name = "New message"});
+            playbackActorRef.Tell(new PlaybackMessage{Name = "New message1"});
+            playbackActorRef.Tell(new PlaybackMessage{Name = "New message2"});
+            playbackActorRef.Tell(new PlaybackMessage{Name = "New message3"});
+            playbackActorRef.Tell(PoisonPill.Instance);
+            playbackActorRef.Tell(new PlaybackMessage{Name = "New message4"});
+            playbackActorRef.Tell(new PlaybackMessage{Name = "New message5"});
+            playbackActorRef.Tell(new PlaybackMessage{Name = "New message6"});
 
             Console.ReadKey();
             
