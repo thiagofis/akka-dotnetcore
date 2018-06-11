@@ -1,5 +1,6 @@
 ﻿using System;
 using Akka.Actor;
+using Akka.Configuration;
 using Akka.NetCore.Actors;
 using Akka.NetCore.Messages;
 
@@ -11,13 +12,13 @@ namespace Akka.NetCore
         static void Main(string[] args)
         {
             // First example of Akka.Net Core using ReceiveActor and PoisonPill
-            PlaybackActorExample();
+            ReceiveActorAndPoisonPillMessageExample();
             
             // Second example of Akka.Net Core use Switchabel Actor Behaviour
-            ConciliatorActorExample();
+            SwitchabelActorBehaviourExample();
         }
 
-        private static void ConciliatorActorExample()
+        private static void SwitchabelActorBehaviourExample()
         {
             var paymentTransactionActorSystem = ActorSystem.Create("PaymentTransactionActorSystem");
             
@@ -36,7 +37,7 @@ namespace Akka.NetCore
             Console.WriteLine("Terminate PaymentTransactionActorSystem");
         }
 
-        private static void PlaybackActorExample()
+        private static void ReceiveActorAndPoisonPillMessageExample()
         {
             var movieStreamingActorSystem = ActorSystem.Create("MovieStreamingActorSystem");
 
@@ -54,6 +55,11 @@ namespace Akka.NetCore
 
             movieStreamingActorSystem.Terminate().Wait();
             Console.WriteLine("Terminate MovieStreamingActorSystem");
+        }
+
+        private static void ActorSupervisionHierarchyExample()
+        {
+            
         }
     }
 }
